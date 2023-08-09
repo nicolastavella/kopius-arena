@@ -10,7 +10,7 @@ const ScreenLayout = (props) => {
             backgroundSize: "auto 95%",
             backgroundPosition: "top center",
         }}>
-            <div style={{ }}>
+            <div style={{ width: '23%', height: "60%", position: "absolute", marginLeft:"38%", marginTop:"14%"}}>
                 {props.children}
             </div>
         </div>
