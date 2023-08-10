@@ -7,6 +7,8 @@ import Home from './Pages/Home';
 import Game from './Pages/Game';
 import Scoreboard from './Pages/Scoreboard';
 import Games from './Pages/Games';
+import FinalScore from './Pages/FinalScore';
+import GameScore from './Pages/GameScore';
 
 
 const router = createBrowserRouter([
