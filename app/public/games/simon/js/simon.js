@@ -1,7 +1,4 @@
 var ini=document.getElementsByTagName("input")[0];
-
-window.parent.postMessage({winner:true, points:100}, '*');
-
 ini.onclick=inicio;//Agrega la funcion iniciar al boton de inicio.
 function inicio()
 	{
@@ -163,17 +160,21 @@ function inicio()
 
 		function menu()
 			{
+				var body = document.getElementsByTagName("body")[0];
 				var cont=document.getElementsByClassName("contenedor")[0];
 				var h2=document.getElementsByTagName("h2")[0];
 				if (ban==0) 	 	
 					{
-						cont.style.display="none"; //Cambia el estilo del contenedor a invisible.
+						body.style.backgroundImage="url('images/fondo2.jpg')";
+						cont.style.display="none"; //Cambia el estilo del contenedor a invisible
 					}
 				if (ban==1)
 					{
 						cont.style.display="grid"; //Cambia el estilo del contenedor a visible.
 						h2.innerHTML="Tu puntaje: "+puntos; //Muestra el puntaje en el titulo del contenedor.
+						window.parent.postMessage({winner:true, points: puntos}, '*');
 						ini.value="Reiniciar"; //Asigna al boton una nueva palabra dentro.
+						body.style.backgroundImage="url('images/getsitelogo.jpg')";
 					}
 			}
 		function sonido(url)

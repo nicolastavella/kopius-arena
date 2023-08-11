@@ -16,6 +16,12 @@ const Games = () => {
         <div style={{width:"90%", marginTop:"0.5em"}}>
           <Button to={'/game/2'}>Smile To Kopius</Button>
         </div>
+        <div style={{width:"90%", marginTop:"0.5em"}}>
+          <Button to={'/game/3'}>Memory</Button>
+        </div>
+        <div style={{width:"90%", marginTop:"0.5em"}}>
+          <Button to={'/game/4'}>Tower</Button>
+        </div>
       </div>
     </ScreenLayout>
   )
