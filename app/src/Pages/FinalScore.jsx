@@ -3,7 +3,6 @@ import ScreenLayout from '../Layout/ScreenLayout'
 import { UserContext } from '../Context/UserProvider'
 import Header from '../Components/Header';
 import Button from '../Components/Button';
-import RegisterDialog from '../Components/RegisterDialog';
 import MultiplyDialog from '../Components/MultiplyDialog';
 
 const FinalScore = () => {

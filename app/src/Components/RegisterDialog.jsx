@@ -5,39 +5,46 @@ import { UserContext } from '../Context/UserProvider';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterDialog = (props) => {
-  const [nickname, setNickname] = useState('');
-  const { totalScore } = useContext(UserContext);
+  const [nicknameState, setNicknameState] = useState('');
+  const { totalScore, setNickname } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleRegister = () => {
-    if (!nickname) {
+    if (!nicknameState) {
       return;
     }
 
-    ArenaService.finish(nickname, totalScore).then(() => {
+    setNickname(nicknameState);
+
+    ArenaService.finish(nicknameState, totalScore).then(() => {
       navigate("/final-score");
     });
   }
 
   return (
     <div style={{
-      top:0,
-      left:0,
+      top: 0,
+      left: 0,
       width: "100%",
-      height: "100%", 
+      height: "100%",
       display: (props.show ? 'flex' : 'none'),
       alignItems: "center",
       justifyContent: "center",
       zIndex: "999",
       position: "fixed",
-      backgroundColor:"rgba(33,33,33,0.8)"
+      backgroundColor: "rgba(33,33,33,0.8)"
     }}>
-      <div style={{ backgroundColor: "#FFF", padding:"2em", border:"0.2em solid #f53e5e", position:"relative"}}>
-        <div style={{width:"1em", position:"absolute", top:"0.1em", right:"0.4em"}}>
-        <Button onClick={()=>props.handleClose()}>X</Button>
+      <div style={{ backgroundColor: "#FFF", padding: "2em", border: "0.2em solid #f53e5e", position: "relative" }}>
+        <div style={{ width: "1em", position: "absolute", top: "0.1em", right: "0.4em" }}>
+          <Button onClick={() => props.handleClose()}>X</Button>
         </div>
-        <input value={nickname} onChange={setNickname} placeholder="Enter your nick" />
-        <Button onClick={handleRegister}>Register score</Button>
+        <div style={{ marginTop: "0.2em" }}>
+          <input value={nicknameState} onChange={(evt) => setNicknameState(evt.target.value)} placeholder="Enter your nickname" style={{ 
+            border: "2px solid #333", display: "block", width: "100%", height: "2.5em", fontFamily:"Handjet", fontSize:"1em", textAlign:"center" }} />
+        </div>
+        <div style={{ marginTop: "0.2em" }}>
+          <Button onClick={handleRegister}>Register score</Button>
+        </div>
       </div>
     </div>
   )

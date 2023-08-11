@@ -8,7 +8,7 @@ import RegisterDialog from '../Components/RegisterDialog';
 
 const GameScore = () => {
     const params = useParams();
-    const { getTotalScore, totalScore, gameScores } = useContext(UserContext);
+    const { lastScore } = useContext(UserContext);
     const [open, setOpen] = useState(false);
 
     const handleRegisterClick = () => {
@@ -19,7 +19,7 @@ const GameScore = () => {
         <ScreenLayout>
             <Header />
             <div style={{ textAlign: "center", marginTop: "1em" }}>GAME OVER</div>
-            <div style={{ textAlign: "center", color: "#ff5588" }}>You won {gameScores[params.gameId]} points</div>
+            <div style={{ textAlign: "center", color: "#ff5588" }}>You won {lastScore} points</div>
             <div style={{ textAlign: "center", fontSize: "0.8em", marginTop: "2em" }}>Keep playing to accumulate more points</div>
 
             <div style={{ display: "flex", flexDirection: "row", margin: "5%" }}>

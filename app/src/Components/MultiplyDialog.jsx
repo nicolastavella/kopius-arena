@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const MultiplyDialog = (props) => {
   const [email, setEmail] = useState('');
-  const {setBonus} = useContext(UserContext);
+  const {setBonus, setPosition, totalScore, addGameScore} = useContext(UserContext);
 
   const handleMultiply = () => {
     if (!email) {
@@ -15,6 +15,8 @@ const MultiplyDialog = (props) => {
 
     ArenaService.multiply(email).then((res) => {
       setBonus(res.bonus);
+      setPosition(res.position);
+      addGameScore(1, (totalScore*res.bonus)-totalScore);
       props.handleClose();
     });
   }
@@ -37,8 +39,12 @@ const MultiplyDialog = (props) => {
           <Button onClick={() => props.handleClose()}>X</Button>
         </div>
         <div style={{ textAlign: "center", fontSize: "0.8em", marginTop: "1em" }}>Subscribe to Kopius newsletter and multiply your points!</div>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
-        <Button onClick={handleMultiply}>Multiply</Button>
+        <div style={{ marginTop: "0.2em" }}>
+        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" style={{border:"2px solid #333", display:"block", width:"100%", height:"2.5em", fontFamily:"Handjet", fontSize:"1em", textAlign:"center"}}/>
+        </div>
+        <div style={{ marginTop: "0.2em" }}>
+          <Button onClick={handleMultiply}>Multiply</Button>
+        </div>
       </div>
     </div>
   )

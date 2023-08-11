@@ -5,27 +5,19 @@ const UserContext = createContext();
 
 const UserProvider = (props) => {
 
-  const [gameScores, setGameScores] = useState([]);
+  const [gameScores, setGameScores] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [nickname, setNickname] = useState('');
   const [position, setPosition] = useState(null);
   const [bonus, setBonus] = useState(0);
   const [email, setEmail] = useState(null);
+  const [lastScore, setLastScore] = useState(0);
 
   const addGameScore = (gameId, score) => {
+    setLastScore(score);
     return new Promise((resolve, reject) => {
 
-      if (!gameScores.length) {
-        gameScores.push()
-      }
-      const nextScores = [
-        // Items before the insertion point:
-        ...gameScores.slice(0, gameId),
-        // New item:
-        score,
-        // Items after the insertion point:
-        ...gameScores.slice(gameId)
-      ];
+      const nextScores = gameScores + score;
 
       setGameScores(nextScores);
       resolve(true);
@@ -33,22 +25,7 @@ const UserProvider = (props) => {
   }
 
   const getTotalScore = () => {
-    console.log(gameScores);
-
-    if (!gameScores.length) {
-      return 0;
-    }
-
-    let total = gameScores.reduce((acumulador, valorActual) => { return acumulador + valorActual; });
-    return total;
-  }
-
-  const registerEmail = (email) => {
-    return ArenaService.finish(nickname, totalScore);
-  }
-
-  const registerNickname = (nickname) => {
-    return ArenaService.finish(nickname, totalScore);
+      return gameScores;
   }
 
   useEffect(() => {
@@ -58,7 +35,7 @@ const UserProvider = (props) => {
 
 
   return (
-    <UserContext.Provider value={{ addGameScore, gameScores, totalScore, nickname, setNickname, position, bonus, setBonus }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ addGameScore, gameScores, totalScore, nickname, setNickname, setPosition, position, bonus, setBonus, lastScore }}>{props.children}</UserContext.Provider>
   )
 }
 
