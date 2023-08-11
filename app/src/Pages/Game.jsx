@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import ScreenLayout from '../Layout/ScreenLayout'
 import { useParams } from 'react-router-dom'
 import Simon from '../Games/Simon';
+import HappyFace from '../Games/HappyFace';
 
 const Game = () => {
   const params = useParams();
@@ -26,6 +27,8 @@ const Game = () => {
     switch (gameId) {
       case '1':
         return <Simon />;
+      case '2':
+        return <HappyFace />;
       default:
         break;
     }

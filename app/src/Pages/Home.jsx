@@ -12,6 +12,7 @@ const Home = () => {
       backgroundPosition: "top center",
     }}>
       <a href={'game/1'}>Start</a>
+      <a href={'game/2'}>Start</a>
       <a href={'scoreboard'}>Scoreboard</a>
     </div>
   )
