@@ -12,7 +12,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/face-api.js"></script>
   <script>
-    const displaySize = { width: 400, height: 300 }
+    var displaySize = { width: 400, height: 300 }
     const numLogos = 6
   </script>
 </head>
@@ -37,8 +37,8 @@
         <img id="logo_excellent" src="images/excellent.png" style="display: none; width: 200px; position: absolute;"/>
         <img id="logo_fail" src="images/fail.png" style="display: none; width: 200px; position: absolute; top: 30px; left: 10px"/>
       </div>
-      <div style="position: relative; width: 410px;">
-        <div style="position: relative; width: 404px; height: 304px; border: 2px solid black;">
+      <div id="vidContainer" style="position: relative; width: 410px;">
+        <div id="vidBorder" style="position: relative; width: 404px; height: 304px; border: 2px solid black;">
           <video id="vidDisplay" style="position: absolute; width: 400px; height: 300px; display: inline-block;" onloadedmetadata="onPlay(this)" autoplay="true"></video>
           <canvas id="overlay" style="position: absolute;" width="400" height="300"/>
         </div>
@@ -65,6 +65,7 @@
       .withFaceExpressions()  
     if (result) {
       const dims = faceapi.matchDimensions(canvas, videoEl, true)
+      
       dims.height = displaySize.height
       dims.width = displaySize.width
       canvas.height = displaySize.height
@@ -209,6 +210,14 @@
   var points = 0
   
   $(document).ready(async function() {
+    var width = $(document).width() - 4
+    var height = $(document).height() - 20
+    displaySize = { width, height }
+    $("#overlay").width = width
+    $("#overlay").height = height
+    $("#vidContainer").css({ width: width, height: height })
+    $("#vidBorder").css({ width: width, height: height })
+    $("#vidDisplay").css({ width: width, height: height })
   });
 </script>
 
