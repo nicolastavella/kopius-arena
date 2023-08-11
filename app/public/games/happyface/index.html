@@ -12,101 +12,46 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/face-api.js"></script>
   <script>
-    const displaySize = { width: 200, height: 150 }
+    const displaySize = { width: 400, height: 300 }
     const numLogos = 6
   </script>
 </head>
 
-<body>
-  <div style="position: absolute;">
+<body style="background-color: black;">
+  <div id="message_container" style="position: absolute; z-index: 200;">
     <h6 id="points" style="position: absolute; left: 10px; width: 100px; display: none;">Points: 0</h6>
-    <div style="position: absolute; left: 70px; top: 80px; width: 200px; text-align: center;">
-      <h3 id="message"></h6>
+    <div style="text-align: center;">
+      <h3 id="message" style="color: cornsilk;"></h6>
     </div>
   </div>
   <div id="container" style="display: none;">
-      <div style="position: absolute; left: 70px; top: 30px;">
-        <img id="logo_0" src="images/logo-0.png" style="display: none;"/> 
-        <img id="logo_1" src="images/logo-1.png" style="display: none;"/> 
-        <img id="logo_2" src="images/logo-2.png" style="display: none;"/> 
-        <img id="logo_3" src="images/logo-3.png" style="display: none;"/> 
-        <img id="logo_4" src="images/logo-4.png" style="display: none;"/> 
-        <img id="logo_5" src="images/logo-5.png" style="display: none;"/> 
+      <div id="logo_container" style="position: absolute; z-index: 33; background-color: aliceblue;">
+        <img id="logo_0" class="img-size" src="images/logo-0.png" style="display: none;"/> 
+        <img id="logo_1" class="img-size" src="images/logo-1.png" style="display: none;"/> 
+        <img id="logo_2" class="img-size" src="images/logo-2.png" style="display: none;"/> 
+        <img id="logo_3" class="img-size" src="images/logo-3.png" style="display: none;"/> 
+        <img id="logo_4" class="img-size" src="images/logo-4.png" style="display: none;"/> 
+        <img id="logo_5" class="img-size" src="images/logo-5.png" style="display: none;"/> 
       </div>
-      <div style="position: absolute;">
-        <img id="logo_excellent" src="images/excellent.png" style="display: none; position: absolute; top: 30px;"/>
-        <img id="logo_fail" src="images/fail.png" style="display: none; width: 300px; position: absolute; top: 50px; left: 20px;"/>
+      <div id="result_container" style="position: absolute; z-index: 100;">
+        <img id="logo_excellent" src="images/excellent.png" style="display: none; width: 200px; position: absolute;"/>
+        <img id="logo_fail" src="images/fail.png" style="display: none; width: 200px; position: absolute; top: 30px; left: 10px"/>
       </div>
-      <div style="position: relative; top: 250px; left: 70px; width: 210px;">
-        <div style="position: relative; width: 204px; height: 154px; border: 2px solid black;">
-          <video id="vidDisplay" style="position: absolute; width: 200px; height: 150px; display: inline-block;" onloadedmetadata="onPlay(this)" autoplay="true"></video>
-          <canvas id="overlay" style="position: absolute;" width="200" height="150"/>
+      <div style="position: relative; width: 410px;">
+        <div style="position: relative; width: 404px; height: 304px; border: 2px solid black;">
+          <video id="vidDisplay" style="position: absolute; width: 400px; height: 300px; display: inline-block;" onloadedmetadata="onPlay(this)" autoplay="true"></video>
+          <canvas id="overlay" style="position: absolute;" width="400" height="300"/>
         </div>
       </div>
   </div>
 </body>
 
-
-
-<script>
-  var waitingDialog = waitingDialog || (function ($) {
-    var $dialog = $(
-      '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
-        '<div class="modal-dialog modal-m">' +
-          '<div class="modal-content">' +
-          '<div class="modal-header text-center"><h3 style="margin:0;"></h3></div>' +
-          '<div class="modal-body">' +
-            '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
-          '</div>' +
-      '</div></div></div>');
-
-  return {
-    show: function (message, options) {
-      if (typeof options === 'undefined') {
-        options = {};
-      }
-      if (typeof message === 'undefined') {
-        message = 'Loading';
-      }
-      var settings = $.extend({
-        dialogSize: 'm',
-        progressType: '',
-        onHide: null 
-      }, options);
-      $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
-      $dialog.find('.progress-bar').attr('class', 'progress-bar');
-      if (settings.showProgress === false) {
-        $dialog.find('.modal-body').hide();
-      }
-      if (settings.progressType) {
-        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
-      }
-      $dialog.find('h3').html(message);
-      if (typeof settings.onHide === 'function') {
-        $dialog.off('hidden.bs.modal').on('hidden.bs.modal', function (e) {
-          settings.onHide.call($dialog);
-        });
-      }
-      $dialog.modal();
-    },
-    hide: function () {
-      $dialog.modal('hide');
-    }
-  };
-
-})(jQuery);
-</script>
-
-
 <script>
   $("#message").text("STARTING GAME...")
-  // waitingDialog.show('Starting....', {dialogSize: 'sm', progressType: 'success'})
   Promise.all([
-    // faceapi.loadTinyFaceDetectorModel('models'),
-    // faceapi.loadTinyYolov2Model('models'),
     faceapi.loadSsdMobilenetv1Model('models'),
     faceapi.loadFaceRecognitionModel('models'),
-    faceapi.loadFaceExpressionModel('models')
+    faceapi.loadFaceExpressionModel('models'),
   ]).then(run)
 
   async function onPlay() {
@@ -116,9 +61,8 @@
     }
     $('#overlay').show()
     const canvas = $('#overlay').get(0)
-    const options = getFaceDetectorOptions()
     const result = await faceapi.detectSingleFace(videoEl)
-      .withFaceExpressions()
+      .withFaceExpressions()  
     if (result) {
       const dims = faceapi.matchDimensions(canvas, videoEl, true)
       dims.height = displaySize.height
@@ -126,7 +70,21 @@
       canvas.height = displaySize.height
       canvas.width = displaySize.width
       const resizedResult = faceapi.resizeResults(result, dims)
-      faceapi.draw.drawDetections(canvas, resizedResult)  
+      // faceapi.draw.drawDetections(canvas, resizedResult)
+      var box = resizedResult.detection.box
+      $("#logo_container").css({
+        left: box.x + box.width / 2 - 40,
+        top: box.y - 100
+      });
+      $("#result_container").css({
+        left: box.x - 40,
+        top: box.y
+      });
+      $("#message_container").css({
+        left: box.x,
+        top: box.y
+      });
+      
       // Expresions
       if (result.expressions) {
         var isHappy = (result.expressions.happy > 0.98)
@@ -155,24 +113,16 @@
     videoEl.srcObject = stream
     startNextRound()
   }
-  
-  // tiny_face_detector options
-  let inputSize = 160
-  let scoreThreshold = 0.5
-
-  function getFaceDetectorOptions() {
-    // SsdMobilenetv1Options
-    // TinyFaceDetectorOptions
-    // MtcnnOptions (Deprecated)
-
-    // return new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
-    return new faceapi.TinyFaceDetectorOptions();
-  }
 
   function rotateLogo() {
     currentLogo++
     if (currentLogo == numLogos) {
       currentLogo = 0
+    }
+    if (currentLogo == 0) {
+      $("#message").text("SMILE!")
+    } else {
+      $("#message").text("")
     }
     for (var n=0; n<numLogos; n++) {
       if (currentLogo == n) {
@@ -199,15 +149,13 @@
       $("#logo_excellent").hide()
       $("#logo_fail").hide()
 
-      rotationTime -= 200
+      rotationTime -= 150
       if (rotationTime <= 200) {
         for (var n=0; n<numLogos; n++) {
           $("#logo_" + n).hide()
         }
-        $("#container").hide()
         $("#message").text("GAME OVER")
         window.parent.postMessage({winner:true, points: points}, '*');
-        // waitingDialog.show('GAME OVER<br>POINTS: ' + points, { dialogSize: 'sm', showProgress: false })
       } else {
         for (var n=0; n<numLogos; n++) {
           $("#logo_" + n).hide()
@@ -250,7 +198,7 @@
     }, 800)
   }
 
-  var rotationTime = 1200
+  var rotationTime = 1000
   var currentLogo = null
   var rotationIntervalId = null
   var isPlaying = false
