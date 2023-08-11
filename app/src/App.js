@@ -7,6 +7,9 @@ import Home from './Pages/Home';
 import Game from './Pages/Game';
 import Scoreboard from './Pages/Scoreboard';
 import Games from './Pages/Games';
+import FinalScore from './Pages/FinalScore';
+import GameScore from './Pages/GameScore';
+import { UserProvider } from './Context/UserProvider';
 
 
 const router = createBrowserRouter([
@@ -39,9 +42,14 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div style={{position:'absolute', width:'100%', height:'100%'}}>        
-        <RouterProvider router={router}/>
-    </div>
+    <UserProvider>
+      <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
+        <RouterProvider router={router} />
+      </div>
+      <audio className="audio-element" autoPlay>
+          <source src="/assets/game.mp3"></source>
+        </audio>
+    </UserProvider>
   );
 }
 

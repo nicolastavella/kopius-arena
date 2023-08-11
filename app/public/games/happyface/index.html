@@ -1,0 +1,215 @@
+<!-- <!DOCTYPE html> -->
+<html>
+<head>
+  <title> Happy Kopius </title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/face-api.js"></script>
+  <script>
+    const displaySize = { width: 400, height: 300 }
+    const numLogos = 6
+  </script>
+</head>
+
+<body style="background-color: black;">
+  <div id="message_container" style="position: absolute; z-index: 200;">
+    <h6 id="points" style="position: absolute; left: 10px; width: 100px; display: none;">Points: 0</h6>
+    <div style="text-align: center;">
+      <h3 id="message" style="color: cornsilk;"></h6>
+    </div>
+  </div>
+  <div id="container" style="display: none;">
+      <div id="logo_container" style="position: absolute; z-index: 33; background-color: aliceblue;">
+        <img id="logo_0" class="img-size" src="images/logo-0.png" style="display: none;"/> 
+        <img id="logo_1" class="img-size" src="images/logo-1.png" style="display: none;"/> 
+        <img id="logo_2" class="img-size" src="images/logo-2.png" style="display: none;"/> 
+        <img id="logo_3" class="img-size" src="images/logo-3.png" style="display: none;"/> 
+        <img id="logo_4" class="img-size" src="images/logo-4.png" style="display: none;"/> 
+        <img id="logo_5" class="img-size" src="images/logo-5.png" style="display: none;"/> 
+      </div>
+      <div id="result_container" style="position: absolute; z-index: 100;">
+        <img id="logo_excellent" src="images/excellent.png" style="display: none; width: 200px; position: absolute;"/>
+        <img id="logo_fail" src="images/fail.png" style="display: none; width: 200px; position: absolute; top: 30px; left: 10px"/>
+      </div>
+      <div style="position: relative; width: 410px;">
+        <div style="position: relative; width: 404px; height: 304px; border: 2px solid black;">
+          <video id="vidDisplay" style="position: absolute; width: 400px; height: 300px; display: inline-block;" onloadedmetadata="onPlay(this)" autoplay="true"></video>
+          <canvas id="overlay" style="position: absolute;" width="400" height="300"/>
+        </div>
+      </div>
+  </div>
+</body>
+
+<script>
+  $("#message").text("STARTING GAME...")
+  Promise.all([
+    faceapi.loadSsdMobilenetv1Model('models'),
+    faceapi.loadFaceRecognitionModel('models'),
+    faceapi.loadFaceExpressionModel('models'),
+  ]).then(run)
+
+  async function onPlay() {
+    const videoEl = $('#vidDisplay').get(0)
+    if(videoEl.paused || videoEl.ended) {
+      return setTimeout(() => onPlay())
+    }
+    $('#overlay').show()
+    const canvas = $('#overlay').get(0)
+    const result = await faceapi.detectSingleFace(videoEl)
+      .withFaceExpressions()  
+    if (result) {
+      const dims = faceapi.matchDimensions(canvas, videoEl, true)
+      dims.height = displaySize.height
+      dims.width = displaySize.width
+      canvas.height = displaySize.height
+      canvas.width = displaySize.width
+      const resizedResult = faceapi.resizeResults(result, dims)
+      // faceapi.draw.drawDetections(canvas, resizedResult)
+      var box = resizedResult.detection.box
+      $("#logo_container").css({
+        left: box.x + box.width / 2 - 40,
+        top: box.y - 100
+      });
+      $("#result_container").css({
+        left: box.x - 40,
+        top: box.y
+      });
+      $("#message_container").css({
+        left: box.x,
+        top: box.y
+      });
+      
+      // Expresions
+      if (result.expressions) {
+        var isHappy = (result.expressions.happy > 0.98)
+        if (isHappy) {
+          if (isPlaying) {
+            isPlaying = false
+            clearInterval(rotationIntervalId)
+            showResult()
+          }
+        }
+      }
+      // faceapi.draw.drawFaceExpressions(canvas, resizedResult, minProbability)
+    }     
+    else{
+      $("#overlay").hide()
+    }
+    setTimeout(() => onPlay())
+  }
+
+  async function run() {
+    $("#message").text("")
+      // waitingDialog.hide()
+    $('#container').show()
+    const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+    const videoEl = $('#vidDisplay').get(0)
+    videoEl.srcObject = stream
+    startNextRound()
+  }
+
+  function rotateLogo() {
+    currentLogo++
+    if (currentLogo == numLogos) {
+      currentLogo = 0
+    }
+    if (currentLogo == 0) {
+      $("#message").text("SMILE!")
+    } else {
+      $("#message").text("")
+    }
+    for (var n=0; n<numLogos; n++) {
+      if (currentLogo == n) {
+        $("#logo_" + n).show()
+      } else {
+        $("#logo_" + n).hide()
+      }
+    }
+  }
+
+  function showResult() {
+    if (currentLogo == 0) {
+      $("#logo_excellent").show()
+      points += 1
+      $("#points").text("Points: " + points)
+    } else {
+      $("#logo_fail").show()
+    }
+    clearResult()
+  }
+
+  function clearResult() {
+    setTimeout(() => {
+      $("#logo_excellent").hide()
+      $("#logo_fail").hide()
+
+      rotationTime -= 150
+      if (rotationTime <= 200) {
+        for (var n=0; n<numLogos; n++) {
+          $("#logo_" + n).hide()
+        }
+        $("#message").text("GAME OVER")
+        window.parent.postMessage({winner:true, points: points}, '*');
+      } else {
+        for (var n=0; n<numLogos; n++) {
+          $("#logo_" + n).hide()
+        }
+        setTimeout(() => {
+          $("#message").text("READY")
+          setTimeout(() => {
+            $("#message").text("GO!")
+            setTimeout(() => {
+              $("#message").text("")
+              rotateLogo()
+              rotationIntervalId = setInterval(rotateLogo, rotationTime)
+              setTimeout(() => {
+                isPlaying = true
+              }, 1000)
+            }, 500)
+          }, 500)
+        }, 500)
+      }
+    }, 500)
+  }
+
+  function startNextRound() {
+    for (var n=0; n<numLogos; n++) {
+      $("#logo_" + n).hide()
+    }
+    nextRoundTimerCounter = 3
+    $("#message").text("READY IN " + nextRoundTimerCounter)
+    nextRoundTimerIntervalId = setInterval(() => {
+      $("#message").text("READY IN " + (--nextRoundTimerCounter))
+      if (nextRoundTimerCounter == 1) {
+        $("#message").text("GO!")
+      }
+      if (nextRoundTimerCounter == 0) {
+        clearInterval(nextRoundTimerIntervalId)
+        $("#message").text("")
+        isPlaying = true
+        rotationIntervalId = setInterval(rotateLogo, rotationTime)
+      }
+    }, 800)
+  }
+
+  var rotationTime = 1000
+  var currentLogo = null
+  var rotationIntervalId = null
+  var isPlaying = false
+
+  var nextRoundTimerIntervalId = null
+  var nextRoundTimerCounter = null
+
+  var points = 0
+  
+  $(document).ready(async function() {
+  });
+</script>
+
+</html>
