@@ -166,7 +166,7 @@ function inicio()
 				if (ban==0) 	 	
 					{
 						body.style.backgroundImage="url('images/fondo2.jpg')";
-						cont.style.display="none"; //Cambia el estilo del contenedor a invisible.
+						cont.style.display="none"; //Cambia el estilo del contenedor a invisible
 					}
 				if (ban==1)
 					{
