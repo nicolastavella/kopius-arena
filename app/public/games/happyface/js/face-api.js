@@ -569,7 +569,7 @@
               throw new Error(callee + " - invalid box: " + JSON.stringify(box) + ", expected object with properties x, y, width, height");
           }
           if (!allowNegativeDimensions && (box.width < 0 || box.height < 0)) {
-              throw new Error(callee + " - width (" + box.width + ") and height (" + box.height + ") must be positive numbers");
+            //   throw new Error(callee + " - width (" + box.width + ") and height (" + box.height + ") must be positive numbers");
           }
       };
       Object.defineProperty(Box.prototype, "x", {
