@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link rel="icon" href="images/Kopius1.png" />
+		<link rel="stylesheet" href="css/style.css" />
+		<title>Memory Game</title>
+	</head>
+	<body>
+		<div class="game-container" style="background-image: url(images/fondo2.jpg);">
+			<div id="timer">
+				<div id="time">Timer <br />00:00</div>
+			</div>
+			<div id="grid"></div>
+		</div>
+		<div id="you-loose">
+			<div id="you-loose-wrapper">
+				<div id="title">
+					Too slow bitch....<br />Until next time.....
+				</div>
+				<div id="points-lose"></div>
+				<button onclick="location.reload()">Try Again</button>
+			</div>
+		</div>
+		<div id="you-win">
+			<div id="you-win-wrapper">
+				<div id="title">Well you won...<br />Now what ?</div>
+				<div id="points-win"></div>
+				<button onclick="location.reload()">Try Again</button>
+			</div>
+		</div>
+		<div id="welcome-screen">
+			<div id="welcome-wrapper">
+				<div id="title">
+					I see, so hours of boredom has finally brought you here<br />You
+					dissapoint me son....<br /><br />GO get a life
+				</div>
+				<button onclick="play();">GO</button>
+				<p id="timeee">
+					(ps. you got 59 seconds to finish this. <br />And yes it's
+					possible I tested it.)
+				</p>
+			</div>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>

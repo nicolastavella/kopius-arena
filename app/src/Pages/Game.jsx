@@ -37,6 +37,10 @@ const Game = () => {
         return <Simon />;
       case '2':
         return <HappyFace />;
+      case '3':
+        <Memory/>
+      case '4':
+        <Tower/>
       default:
         break;
     }
