@@ -9,6 +9,9 @@ const ScreenLayout = (props) => {
             backgroundRepeat: "no-repeat",
             backgroundSize: "auto 95%",
             backgroundPosition: "top center",
+            fontFamily: 'Handjet',
+            fontSize: '2em',
+            color: '#FFFFFF'
         }}>
             <div style={{ width: '23%', height: "60%", position: "absolute", marginLeft:"38%", marginTop:"14%"}}>
                 {props.children}
