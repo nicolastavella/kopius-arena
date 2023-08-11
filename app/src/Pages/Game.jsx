@@ -3,6 +3,8 @@ import ScreenLayout from '../Layout/ScreenLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import Simon from '../Games/Simon';
 import HappyFace from '../Games/HappyFace';
+import Memory from '../Games/Memory';
+import Tower from '../Games/Tower';
 import { UserContext } from '../Context/UserProvider';
 
 const Game = () => {
@@ -38,9 +40,9 @@ const Game = () => {
       case '2':
         return <HappyFace />;
       case '3':
-        <Memory/>
+        return <Memory />
       case '4':
-        <Tower/>
+        return <Tower />
       default:
         break;
     }
