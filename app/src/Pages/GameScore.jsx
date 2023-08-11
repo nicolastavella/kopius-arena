@@ -1,22 +1,39 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UserContext } from '../Context/UserProvider';
 import ScreenLayout from '../Layout/ScreenLayout';
 import { useParams } from 'react-router-dom';
+import Button from '../Components/Button';
+import Header from '../Components/Header';
+import RegisterDialog from '../Components/RegisterDialog';
 
 const GameScore = () => {
     const params = useParams();
     const { getTotalScore, totalScore, gameScores } = useContext(UserContext);
+    const [open, setOpen] = useState(false);
 
-    console.log(gameScores);
+    const handleRegisterClick = () => {
+        setOpen(true);
+    }
 
     return (
         <ScreenLayout>
-            <div>Game Over</div>
-            <div>You won {gameScores[params.gameId]} points</div>
-            <div>Keep playing to accumulate more points</div>
-            <a href={'/game/' + params.gameId}>Retry</a>
-            <a href="/games">Next Game</a>
-            <button href="/final-score">Register in Scoreboard</button>
+            <Header />
+            <div style={{ textAlign: "center", marginTop: "1em" }}>GAME OVER</div>
+            <div style={{ textAlign: "center", color: "#ff5588" }}>You won {gameScores[params.gameId]} points</div>
+            <div style={{ textAlign: "center", fontSize: "0.8em", marginTop: "2em" }}>Keep playing to accumulate more points</div>
+
+            <div style={{ display: "flex", flexDirection: "row", margin: "5%" }}>
+                <div style={{ width: "28%" }}>
+                    <Button to={'/game/' + params.gameId}>Retry</Button>
+                </div>
+                <div style={{ width: "65%", marginLeft: "5%" }}>
+                    <Button to="/games">More Games</Button>
+                </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "row", margin: "5%" }}>
+                <Button onClick={handleRegisterClick}>Register your score</Button>
+            </div>
+            <RegisterDialog show={open} handleClose={() => setOpen(false)} />
         </ScreenLayout>
     )
 }

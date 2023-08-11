@@ -23,7 +23,7 @@ class ArenaService {
     getScoredboard() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve([{ position: 1, nickname: "Juancito" },{ position: 2, nickname: "HolaMinaXD" },{ position: 3, nickname: "Wosito33" }]);
+                resolve([{ position: 1, nickname: "Juancito", points:"500"},{ position: 2, nickname: "HolaMinaXD", points:"350" },{ position: 3, nickname: "Wosito33", points:"300" }]);
             }, "500");
         });
     }

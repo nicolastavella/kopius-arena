@@ -58,7 +58,7 @@ const UserProvider = (props) => {
 
 
   return (
-    <UserContext.Provider value={{ addGameScore, gameScores, totalScore, nickname, setNickname, position, bonus }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ addGameScore, gameScores, totalScore, nickname, setNickname, position, bonus, setBonus }}>{props.children}</UserContext.Provider>
   )
 }
 
