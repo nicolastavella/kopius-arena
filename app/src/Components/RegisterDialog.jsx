@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const RegisterDialog = (props) => {
   const [nicknameState, setNicknameState] = useState('');
-  const { totalScore, setNickname } = useContext(UserContext);
+  const { totalScore, setNickname, setPosition } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleRegister = () => {
@@ -16,7 +16,8 @@ const RegisterDialog = (props) => {
 
     setNickname(nicknameState);
 
-    ArenaService.finish(nicknameState, totalScore).then(() => {
+    ArenaService.finish(nicknameState, totalScore).then((res) => {
+      setPosition(res.position);
       navigate("/final-score");
     });
   }

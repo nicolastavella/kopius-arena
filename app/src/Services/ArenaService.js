@@ -7,7 +7,7 @@ class ArenaService {
     finish(nickname, points) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve({ id: 540 });
+                resolve({ id: 540, position: 8 });
             }, "500");
         });
     }
@@ -15,7 +15,7 @@ class ArenaService {
     multiply(email) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve({ id: 555, bonus: 4, totalScore: 1500, position: 5 });
+                resolve({ id: 555, bonus: 4, totalScore: 1500, position: 4 });
             }, "500");
         });
     }
